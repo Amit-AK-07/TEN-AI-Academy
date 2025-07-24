@@ -1,13 +1,14 @@
 from pathlib import Path
 import environ, os
 
+BASE_DIR = Path(__file__).resolve().parent.parent
+# Initialize environment variables
 env = environ.Env(
     DEBUG = (bool, False)
 )
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
-BASE_DIR = Path(__file__).resolve().parent.parent
-
-SECRET_KEY = env('KEY')
+SECRET_KEY = env('KEY', str)
 
 DEBUG = env('DEBUG')
 
