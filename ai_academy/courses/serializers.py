@@ -180,3 +180,32 @@ class CourseSerializer(serializers.ModelSerializer):
         course.instructors.set(instructors_data)
         course.partners.set(partners_data)
         return course
+
+class CoursePageSerializer(serializers.ModelSerializer):
+    featured_course = CourseSerializer(many=True, read_only=True)
+    top_rated_course = CourseSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = CoursePage
+        fields = ['title', 'featured_course', 'top_rated_course']
+
+    def validate_title(self, value):
+        if not value:
+            raise serializers.ValidationError("This field cannot be blank")
+        return value.strip().title()
+    
+    def create(self, validated_data):
+        featured_courses_data = validated_data.pop('featured_course', [])
+        top_rated_courses_data = validated_data.pop('top_rated_course', [])
+        instance = super().create(validated_data)
+        instance.featured_course.set(featured_courses_data)
+        instance.top_rated_course.set(top_rated_courses_data)
+        return instance
+
+    def update(self, instance, validated_data):
+        featured_courses_data = validated_data.pop('featured_course', [])
+        top_rated_courses_data = validated_data.pop('top_rated_course', [])
+        instance = super().update(instance, validated_data)
+        instance.featured_course.set(featured_courses_data)
+        instance.top_rated_course.set(top_rated_courses_data)
+        return instance
