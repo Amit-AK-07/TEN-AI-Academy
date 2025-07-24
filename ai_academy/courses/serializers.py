@@ -9,14 +9,14 @@ class TopicSerializer(serializers.ModelSerializer):
 
     def validate_name(self, value):
         if not value:
-            raise serializers.ValidationError("This field cannot be blank")
-        
-        # Check if the topic name already exists
-        if Topic.objects.filter(name__iexact=value).exists():
-            raise serializers.ValidationError("Topic with this name already exists.")       
+            raise serializers.ValidationError("This field cannot be blank")      
         return value.strip().title()
     
     def create(self, validated_data):
+        name = validated_data.get("name")
+        # Check if the topic name already exists
+        if Topic.objects.filter(name__iexact=name).exists():
+            raise serializers.ValidationError("Topic with this name already exists.") 
         # Create a new Topic instance
         return super().create(validated_data)
         
@@ -37,12 +37,13 @@ class InstructorSerializer(serializers.ModelSerializer):
     def validate_name(self, value):
         if not value:
             raise serializers.ValidationError("This field cannot be blank")
-        # Checks if the instructor name already exists
-        if Instructor.objects.filter(name__iexact=value).exists():
-            raise serializers.ValidationError("Instructor with this name already exists.")
         return value.strip().title()
     
     def create(self, validated_data):
+        name = validated_data.get("name")
+        # Checks if the instructor name already exists
+        if Instructor.objects.filter(name__iexact=name).exists():
+            raise serializers.ValidationError("Instructor with this name already exists.")
         # Create a new Instructor instance
         return super().create(validated_data)
         
@@ -63,10 +64,6 @@ class PartnershipSerializer(serializers.ModelSerializer):
     def validate_name(self, value):
         if not value:
             raise serializers.ValidationError("This field cannot be blank")
-        
-        # Checks if the partnership name already exists
-        if Partnership.objects.filter(name__iexact=value).exists():
-            raise serializers.ValidationError("Partnership with this name already exists.")
         return value.strip().title()
     
     def validate_logo_url(self, value):
@@ -85,6 +82,10 @@ class PartnershipSerializer(serializers.ModelSerializer):
         return value.strip()
       
     def create(self, validated_data):
+        name = validated_data.get("name")
+        # Checks if the partnership name already exists
+        if Partnership.objects.filter(name__iexact=name).exists():
+            raise serializers.ValidationError("Partnership with this name already exists.")
         # Create a new Partnership instance
         return super().create(validated_data)
     
@@ -119,17 +120,12 @@ class CourseSerializer(serializers.ModelSerializer):
     def validate_title(self, value):
         if not value:
             raise serializers.ValidationError("This field cannot be blank")
-        # Checks if the course title already exists
-        if Course.objects.filter(title__iexact=value.strip()).exists():
-            raise serializers.ValidationError("Course with this title already exists.")
         return value.strip().title()
     
     def validate_slug(self, value):
         if value:
-            slug = slugify(value.strip())
-            if Course.objects.filter(slug__iexact=slug).exists():
-                raise serializers.ValidationError("Slug with this value already exists.")
-        return value.strip().lower()
+            value = slugify(value.strip())
+        return value.lower()
 
     def validate_featured_image(self, value):
         if not value:
@@ -148,6 +144,14 @@ class CourseSerializer(serializers.ModelSerializer):
         return value.strip()
     
     def create(self, validated_data):
+        title = validated_data.get("title")
+        slug = validated_data.get("slug")
+        # Checks if the course title already exists
+        if Course.objects.filter(title__iexact=title).exists():
+            raise serializers.ValidationError("Course with this title already exists.")
+        # Checks if the slug already exists
+        if Course.objects.filter(slug__iexact=slug).exists():
+            raise serializers.ValidationError("Slug with this value already exists.")
         topics_data = validated_data.pop('topics', [])
         instructors_data = validated_data.pop('instructors', [])
         partners_data = validated_data.pop('partners', [])
