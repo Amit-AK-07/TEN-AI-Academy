@@ -4,6 +4,8 @@ import uuid
 
 class Topic(models.Model):
     name = models.CharField(max_length=255, unique=True)
+    date_added = models.DateField(auto_now_add=True)
+    last_modified = models.DateField(auto_now=True)
 
     def save(self, *args, **kwargs):
         if self.name:
@@ -15,6 +17,8 @@ class Topic(models.Model):
 
 class Instructor(models.Model):
     name = models.CharField(max_length=255, unique=True)
+    date_joined = models.DateField(auto_now_add=True)
+    last_modified = models.DateField(auto_now=True)
 
     def save(self, *args, **kwargs):
         if self.name:
@@ -27,6 +31,8 @@ class Instructor(models.Model):
 class Partnership(models.Model):
     name = models.CharField(max_length=255, unique=True)
     logo_url = models.URLField()
+    date_joined = models.DateField(auto_now_add=True)
+    last_modified = models.DateField(auto_now=True)
 
     def save(self, *args, **kwargs):
         if self.name:
@@ -47,7 +53,7 @@ class Course(models.Model):
     date = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
     topics = models.ManyToManyField(Topic, related_name='courses')
-    Instructors = models.ManyToManyField(Instructor, related_name='courses')
+    instructors = models.ManyToManyField(Instructor, related_name='courses')
     partners = models.ManyToManyField(Partnership, related_name='courses')
 
     def save(self, *args, **kwargs):
@@ -76,6 +82,8 @@ class CoursePage(models.Model):
     title = models.CharField(max_length=255)
     featured_courses = models.ManyToManyField(Course, related_name='featured_course')
     top_rated_courses = models.ManyToManyField(Course, related_name='top_rated_course')
+    date_added = models.DateField(auto_now_add=True)
+    last_modified = models.DateField(auto_now=True)
 
     def save(self, *args, **kwargs):
         if self.title:

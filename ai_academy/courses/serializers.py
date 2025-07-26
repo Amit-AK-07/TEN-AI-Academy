@@ -3,9 +3,12 @@ from django.utils.text import slugify
 from .models import Topic, Instructor, Partnership, Course, CoursePage
 
 class TopicSerializer(serializers.ModelSerializer):
+    date_added = serializers.DateField(read_only=True)
+    last_modified = serializers.DateField(read_only=True)
+
     class Meta:
         model = Topic
-        fields = ['name']
+        fields = ['name', 'date_added', 'last_modified']
 
     def validate_name(self, value):
         if not value:
@@ -30,9 +33,12 @@ class TopicSerializer(serializers.ModelSerializer):
         return instance
     
 class InstructorSerializer(serializers.ModelSerializer):
+    date_joined = serializers.DateField(read_only=True)
+    last_modified = serializers.DateField(read_only=True)
+
     class Meta:
         model = Instructor
-        fields = ["name"]
+        fields = ["name", "date_joined", "last_modified"]
 
     def validate_name(self, value):
         if not value:
@@ -57,9 +63,12 @@ class InstructorSerializer(serializers.ModelSerializer):
         return instance
 
 class PartnershipSerializer(serializers.ModelSerializer):
+    date_joined = serializers.DateField(read_only=True)
+    last_modified = serializers.DateField(read_only=True)
+
     class Meta:
         model = Partnership
-        fields = ["name", "logo_url"]
+        fields = ["name", "logo_url", "date_joined", "last_modified"]
 
     def validate_name(self, value):
         if not value:
@@ -106,6 +115,8 @@ class CourseSerializer(serializers.ModelSerializer):
     id = serializers.UUIDField(read_only=True)
     slug = serializers.SlugField(required=False, allow_blank=True)
     landing_page = serializers.URLField(required=False, allow_blank=True)
+    date = serializers.DateTimeField(read_only=True)
+    modified = serializers.DateTimeField(read_only=True)
     topics = TopicSerializer(many=True, read_only=True)
     instructors = InstructorSerializer(many=True, read_only=True)
     partners = PartnershipSerializer(many=True, read_only=True)
@@ -188,10 +199,12 @@ class CourseSerializer(serializers.ModelSerializer):
 class CoursePageSerializer(serializers.ModelSerializer):
     featured_course = CourseSerializer(many=True, read_only=True)
     top_rated_course = CourseSerializer(many=True, read_only=True)
+    date_added = serializers.DateField(read_only=True)
+    last_modified = serializers.DateField(read_only=True)
 
     class Meta:
         model = CoursePage
-        fields = ['title', 'featured_course', 'top_rated_course']
+        fields = ['title', 'featured_course', 'top_rated_course', 'date_added', 'last_modified']
 
     def validate_title(self, value):
         if not value:
