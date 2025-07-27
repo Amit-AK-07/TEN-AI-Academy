@@ -3,7 +3,7 @@ from django.utils.text import slugify
 import uuid
 
 class Topic(models.Model):
-    name = models.CharField(max_length=255, unique=True)
+    name = models.CharField(max_length=255)
     date_added = models.DateField(auto_now_add=True)
     last_modified = models.DateField(auto_now=True)
 
@@ -16,7 +16,7 @@ class Topic(models.Model):
         return self.name
 
 class Instructor(models.Model):
-    name = models.CharField(max_length=255, unique=True)
+    name = models.CharField(max_length=255)
     date_joined = models.DateField(auto_now_add=True)
     last_modified = models.DateField(auto_now=True)
 
@@ -29,7 +29,7 @@ class Instructor(models.Model):
         return self.name
 
 class Partnership(models.Model):
-    name = models.CharField(max_length=255, unique=True)
+    name = models.CharField(max_length=255)
     logo_url = models.URLField()
     date_joined = models.DateField(auto_now_add=True)
     last_modified = models.DateField(auto_now=True)

@@ -8,7 +8,7 @@ class TopicSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Topic
-        fields = ['name', 'date_added', 'last_modified']
+        fields = ['id', 'name', 'date_added', 'last_modified']
 
     def validate_name(self, value):
         if not value:
@@ -16,11 +16,6 @@ class TopicSerializer(serializers.ModelSerializer):
         return value.strip().title()
     
     def create(self, validated_data):
-        name = validated_data.get("name")
-        # Check if the topic name already exists
-        if Topic.objects.filter(name__iexact=name).exists():
-            raise serializers.ValidationError("Topic with this name already exists.") 
-        # Create a new Topic instance
         return super().create(validated_data)
         
     def update(self, instance, validated_data):
@@ -38,7 +33,7 @@ class InstructorSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Instructor
-        fields = ["name", "date_joined", "last_modified"]
+        fields = ["id", "name", "date_joined", "last_modified"]
 
     def validate_name(self, value):
         if not value:
@@ -46,10 +41,6 @@ class InstructorSerializer(serializers.ModelSerializer):
         return value.strip().title()
     
     def create(self, validated_data):
-        name = validated_data.get("name")
-        # Checks if the instructor name already exists
-        if Instructor.objects.filter(name__iexact=name).exists():
-            raise serializers.ValidationError("Instructor with this name already exists.")
         # Create a new Instructor instance
         return super().create(validated_data)
         
@@ -68,7 +59,7 @@ class PartnershipSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Partnership
-        fields = ["name", "logo_url", "date_joined", "last_modified"]
+        fields = ["id", "name",  "date_joined", "last_modified"]
 
     def validate_name(self, value):
         if not value:
@@ -91,10 +82,6 @@ class PartnershipSerializer(serializers.ModelSerializer):
         return value.strip()
       
     def create(self, validated_data):
-        name = validated_data.get("name")
-        # Checks if the partnership name already exists
-        if Partnership.objects.filter(name__iexact=name).exists():
-            raise serializers.ValidationError("Partnership with this name already exists.")
         # Create a new Partnership instance
         return super().create(validated_data)
     
@@ -105,7 +92,8 @@ class PartnershipSerializer(serializers.ModelSerializer):
         if name != instance.name:
             if Partnership.objects.exclude(id=instance.id).filter(name__iexact=name).exists():
                 raise serializers.ValidationError("Partner with this name already exists.")
-            instance.name = name
+        instance.name = name
+        instance.save()
         if logo_url != instance.logo_url:
            instance.logo_url = logo_url
         instance.save()
@@ -117,23 +105,41 @@ class CourseSerializer(serializers.ModelSerializer):
     landing_page = serializers.URLField(required=False, allow_blank=True)
     date = serializers.DateTimeField(read_only=True)
     modified = serializers.DateTimeField(read_only=True)
-    topics = TopicSerializer(many=True, read_only=True)
-    instructors = InstructorSerializer(many=True, read_only=True)
-    partners = PartnershipSerializer(many=True, read_only=True)
+    # For input
+    topics = TopicSerializer(many=True, write_only=True, required=False)
+    instructors = InstructorSerializer(many=True, write_only=True, required=False)
+    partners = PartnershipSerializer(many=True, write_only=True, required=False)
+
+    # For output
+    all_topics = serializers.SerializerMethodField()
+    all_instructors = serializers.SerializerMethodField()
+    all_partners = serializers.SerializerMethodField()
+
     class Meta:
         model = Course
         fields = [
             "id", "title", "slug", "description", "course_type",
             "skill_level", "featured_image", "landing_page", 
-            "date", "modified", "topics", "instructors", "partners"
+            "date", "modified", "topics", "instructors", "partners", 
+            "all_topics", "all_instructors", "all_partners"
         ]
 
+    def get_all_topics(self, obj):
+        return TopicSerializer(obj.topics.all(), many=True).data
+    
+    def get_all_instructors(self, obj):
+        return InstructorSerializer(obj.instructors.all(), many=True).data
+    
+    def get_all_partners(self, obj):
+        return PartnershipSerializer(obj.partners.all(), many=True).data
+    
     def validate_title(self, value):
         if not value:
             raise serializers.ValidationError("This field cannot be blank")
         return value.strip().title()
     
     def validate_slug(self, value):
+        
         if value:
             value = slugify(value.strip())
         return value.lower()
@@ -159,41 +165,77 @@ class CourseSerializer(serializers.ModelSerializer):
         slug = validated_data.get("slug")
         # Checks if the course title already exists
         if Course.objects.filter(title__iexact=title).exists():
-            raise serializers.ValidationError("Course with this title already exists.")
+            raise serializers.ValidationError({"error":"Course with this title already exists."})
         # Checks if the slug already exists
         if Course.objects.filter(slug__iexact=slug).exists():
             raise serializers.ValidationError("Slug with this value already exists.")
-        topics_data = validated_data.pop('topics', [])
-        instructors_data = validated_data.pop('instructors', [])
-        partners_data = validated_data.pop('partners', [])
-        course = super().create(validated_data)
+        topics_data = validated_data.pop('topics')
+        instructors_data = validated_data.pop('instructors')
+        partners_data = validated_data.pop('partners')
+        course = Course.objects.create(**validated_data)
         # Handle nested relationships
-        course.topics.set(topics_data)
-        course.instructors.set(instructors_data)
-        course.partners.set(partners_data)
+        for value in topics_data:
+            obj, _ = Topic.objects.get_or_create(**value)
+            course.topics.add(obj)
+        for value in instructors_data:
+            obj, _ = Instructor.objects.get_or_create(**value)
+            course.instructors.add(obj)
+        for value in partners_data:
+            obj, _ = Partnership.objects.get_or_create(**value)
+            course.partners.add(obj)
         return course
     
     def update(self, instance, validated_data):
-        title = validated_data.get('title', instance.title)
+        title = validated_data.get('title')
         if title != instance.title:
             if Course.objects.exclude(id=instance.id).filter(title__iexact=title).exists():
                 raise serializers.ValidationError("Course with this title already exists.")
             instance.title = title.strip().title()
-        if 'slug' in validated_data:
-            slug = validated_data.get('slug', instance.slug)
-            if slug:
-                slug = slugify(slug.strip())
+            instance.slug = slugify(title.strip())
+        slug = validated_data.get('slug', None)                
+        if slug:
+            slug = slugify(slug.strip())
+            if slug != instance.slug:
                 if Course.objects.exclude(id=instance.id).filter(slug__iexact=slug).exists():
-                    raise serializers.ValidationError("Slug with this value already exists.")
-                instance.slug = slug
+                    raise serializers.ValidationError("Slug with this value already exists.")           
+        else:
+            slug = slugify(title.strip())
+        instance.slug = slug
+        instance.save()
         topics_data = validated_data.pop('topics', [])
         instructors_data = validated_data.pop('instructors', [])
         partners_data = validated_data.pop('partners', [])
         course = super().update(instance, validated_data)
-        # Handle nested relationships
-        course.topics.set(topics_data)
-        course.instructors.set(instructors_data)
-        course.partners.set(partners_data)
+               
+        if topics_data is not None:
+            for value in topics_data:
+                try:
+                    topic = Topic.objects.get(name__iexact=value['name'])
+                    course.topics.name = value['name']
+                except Topic.DoesNotExist:
+                    topic = Topic.objects.create(name=value['name'])
+                    course.topics.add(topic)               
+                course.save()
+
+        if instructors_data is not None:
+            for value in instructors_data:
+                try:
+                    instructor = Instructor.objects.get(name__iexact=value['name'])
+                    course.instructors.name = value['name']
+                except Instructor.DoesNotExist:
+                    instructor = Instructor.objects.create(name=value['name'])
+                    course.instructors.add(instructor)
+                course.save()
+
+        if partners_data is not None:
+            for value in partners_data:
+                try:
+                    partner = Partnership.objects.get(name__iexact=value['name'])
+                    course.partners.name = value['name']
+                except Partnership.DoesNotExist:
+                    partner = Partnership.objects.create(name=value['name'])
+                    course.partners.add(partner)
+                course.save()
         return course
 
 class CoursePageSerializer(serializers.ModelSerializer):

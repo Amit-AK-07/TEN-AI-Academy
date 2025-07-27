@@ -154,6 +154,11 @@ class CourseViewSet(viewsets.ModelViewSet):
                         "data": serializer.data}, status=status.HTTP_200_OK)
     
     def create(self, request, *args, **kwargs):
+        Course.objects.all().delete()
+        Topic.objects.all().delete()
+        Instructor.objects.all().delete()
+        Partnership.objects.all().delete()
+        
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
@@ -180,7 +185,7 @@ class CoursePageViewSet(viewsets.ModelViewSet):
     serializer_class = CoursePageSerializer
 
     def get_queryset(self):
-        return Course.objects.all()
+        return Course.objects.prefetch_related("topics", "instructors", "partners")
     
     def list(self, request, *args, **kwargs):
         serializer = self.get_serializer(self.get_queryset(), many=True)
