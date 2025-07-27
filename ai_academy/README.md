@@ -67,7 +67,7 @@ json
   ]
 }
 Notes
-Authentication and permission checks are currently disabled for ease of development. You can enable them by uncommenting the decorators or adding permission_classes.
+Authentication and permission checks are currently disabled for ease of developmentas this branch has not set up permissions for the protected views yet.
 
 When creating a Course, related Topic, Instructor, and Partnership entries can be nested in the request.
 Example (Response):
