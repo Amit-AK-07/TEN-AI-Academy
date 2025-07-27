@@ -154,11 +154,6 @@ class CourseViewSet(viewsets.ModelViewSet):
                         "data": serializer.data}, status=status.HTTP_200_OK)
     
     def create(self, request, *args, **kwargs):
-        Course.objects.all().delete()
-        Topic.objects.all().delete()
-        Instructor.objects.all().delete()
-        Partnership.objects.all().delete()
-        
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
