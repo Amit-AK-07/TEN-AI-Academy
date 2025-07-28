@@ -80,8 +80,8 @@ class Course(models.Model):
 
 class CoursePage(models.Model):
     title = models.CharField(max_length=255)
-    featured_courses = models.ManyToManyField(Course, related_name='featured_course')
-    top_rated_courses = models.ManyToManyField(Course, related_name='top_rated_course')
+    featured_courses = models.ManyToManyField(Course, related_name='featured_courses')
+    top_rated_courses = models.ManyToManyField(Course, related_name='top_rated_courses')
     date_added = models.DateField(auto_now_add=True)
     last_modified = models.DateField(auto_now=True)
 

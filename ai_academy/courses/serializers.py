@@ -173,17 +173,21 @@ class CourseSerializer(serializers.ModelSerializer):
         instructors_data = validated_data.pop('instructors')
         partners_data = validated_data.pop('partners')
         course = Course.objects.create(**validated_data)
+
         # Handle nested relationships
-        for value in topics_data:
-            obj, _ = Topic.objects.get_or_create(**value)
+        if topics_data:
+            for value in topics_data:
+                obj, _ = Topic.objects.get_or_create(**value)
             course.topics.add(obj)
-        for value in instructors_data:
-            obj, _ = Instructor.objects.get_or_create(**value)
-            course.instructors.add(obj)
-        for value in partners_data:
-            obj, _ = Partnership.objects.get_or_create(**value)
-            course.partners.add(obj)
-        return course
+        if instructors_data:
+            for value in instructors_data:
+                obj, _ = Instructor.objects.get_or_create(**value)
+                course.instructors.add(obj)
+        if partners_data:
+            for value in partners_data:
+                obj, _ = Partnership.objects.get_or_create(**value)
+                course.partners.add(obj)
+            return course
     
     def update(self, instance, validated_data):
         title = validated_data.get('title')
@@ -207,7 +211,7 @@ class CourseSerializer(serializers.ModelSerializer):
         partners_data = validated_data.pop('partners', [])
         course = super().update(instance, validated_data)
                
-        if topics_data is not None:
+        if topics_data:
             for value in topics_data:
                 try:
                     topic = Topic.objects.get(name__iexact=value['name'])
@@ -215,9 +219,8 @@ class CourseSerializer(serializers.ModelSerializer):
                 except Topic.DoesNotExist:
                     topic = Topic.objects.create(name=value['name'])
                     course.topics.add(topic)               
-                course.save()
 
-        if instructors_data is not None:
+        if instructors_data:
             for value in instructors_data:
                 try:
                     instructor = Instructor.objects.get(name__iexact=value['name'])
@@ -225,9 +228,8 @@ class CourseSerializer(serializers.ModelSerializer):
                 except Instructor.DoesNotExist:
                     instructor = Instructor.objects.create(name=value['name'])
                     course.instructors.add(instructor)
-                course.save()
 
-        if partners_data is not None:
+        if partners_data:
             for value in partners_data:
                 try:
                     partner = Partnership.objects.get(name__iexact=value['name'])
@@ -235,36 +237,95 @@ class CourseSerializer(serializers.ModelSerializer):
                 except Partnership.DoesNotExist:
                     partner = Partnership.objects.create(name=value['name'])
                     course.partners.add(partner)
-                course.save()
         return course
 
 class CoursePageSerializer(serializers.ModelSerializer):
-    featured_course = CourseSerializer(many=True, read_only=True)
-    top_rated_course = CourseSerializer(many=True, read_only=True)
     date_added = serializers.DateField(read_only=True)
     last_modified = serializers.DateField(read_only=True)
 
+    # Input: expect list of Course IDs
+    featured_courses = serializers.PrimaryKeyRelatedField(queryset=Course.objects.all(),
+        many=True, write_only=True
+    )
+    top_rated_courses = serializers.PrimaryKeyRelatedField(queryset=Course.objects.all(),
+        many=True, write_only=True
+    )
+
+    # For output
+    all_featured_courses = serializers.SerializerMethodField()
+    all_top_rated_courses = serializers.SerializerMethodField()
+
     class Meta:
         model = CoursePage
-        fields = ['title', 'featured_course', 'top_rated_course', 'date_added', 'last_modified']
+        fields = ['id', 'title', 'featured_courses', 'top_rated_courses', 'date_added', 
+                  'last_modified', 'all_featured_courses', 'all_top_rated_courses'
+                ]
 
     def validate_title(self, value):
         if not value:
             raise serializers.ValidationError("This field cannot be blank")
+        if CoursePage.objects.filter(title__exact=value.strip().title()).exists():
+            raise serializers.ValidationError({'error': 'Course-page title already exist!'})
         return value.strip().title()
     
+    def get_all_featured_courses(self, obj):
+        return CourseSerializer(obj.featured_courses.all(), many=True).data
+    
+    def get_all_top_rated_courses(self, obj):
+        return CourseSerializer(obj.featured_courses.all(), many=True).data
+
     def create(self, validated_data):
-        featured_courses_data = validated_data.pop('featured_course', [])
-        top_rated_courses_data = validated_data.pop('top_rated_course', [])
-        instance = super().create(validated_data)
-        instance.featured_course.set(featured_courses_data)
-        instance.top_rated_course.set(top_rated_courses_data)
-        return instance
+        print(validated_data)
+        featured_courses_data = validated_data.pop('featured_courses', [])
+        top_rated_courses_data = validated_data.pop('top_rated_courses', [])
+        course = CoursePage.objects.create(**validated_data)
+
+        # Handle nested relationships
+        if featured_courses_data:
+            print("In here")
+            for value in featured_courses_data:
+                try:
+                    featured = Course.objects.get(title__exact=value)
+                except Course.DoesNotExist:
+                    raise serializers.ValidationError({"error": "This Course ID in featured-courses does not exist"})
+                if featured in course.featured_courses.all():
+                    pass
+                else:
+                    course.featured_courses.add(featured)
+
+        if top_rated_courses_data:
+            for value in top_rated_courses_data:
+                try:
+                    rated = Course.objects.get(title__exact=value)
+                except Course.DoesNotExist:
+                    raise serializers.ValidationError({"error": "This Course ID in top-rated-courses does not exist"})  
+                if rated in course.top_rated_courses.all():
+                    pass
+                else:
+                    course.top_rated_courses.add(rated)
+        print("Here 2")
+        return course
 
     def update(self, instance, validated_data):
         featured_courses_data = validated_data.pop('featured_course', [])
         top_rated_courses_data = validated_data.pop('top_rated_course', [])
-        instance = super().update(instance, validated_data)
-        instance.featured_course.set(featured_courses_data)
-        instance.top_rated_course.set(top_rated_courses_data)
-        return instance
+        course = super().update(instance, validated_data)
+        course.featured_course.set(featured_courses_data)
+        course.top_rated_course.set(top_rated_courses_data)
+
+        if featured_courses_data:
+            for value in featured_courses_data:
+                try:
+                    featured = Course.objects.get(id=value)
+                except Course.DoesNotExist:
+                    raise serializers.ValidationError({"error": "This Course ID in featured-courses does not exist"})
+                course.featured_courses.id = featured
+
+        if top_rated_courses_data:
+            for value in top_rated_courses_data:
+                try:
+                    rated = Course.objects.get(id=value)
+                except Course.DoesNotExist:
+                    raise serializers.ValidationError({"error": "This Course ID in top-rated-courses does not exist"})   
+                course.top_rated_courses.id = rated
+        return course

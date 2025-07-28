@@ -140,7 +140,7 @@ class CourseViewSet(viewsets.ModelViewSet):
     serializer_class = CourseSerializer
 
     def get_queryset(self):
-        return Course.objects.all()
+        return Course.objects.prefetch_related("topics", "instructors", "partners")
     
     def list(self, request, *args, **kwargs):
         serializer = self.get_serializer(self.get_queryset(), many=True)
@@ -180,24 +180,24 @@ class CoursePageViewSet(viewsets.ModelViewSet):
     serializer_class = CoursePageSerializer
 
     def get_queryset(self):
-        return Course.objects.prefetch_related("topics", "instructors", "partners")
+        return CoursePage.objects.prefetch_related("featured_courses", "top_rated_courses")
     
     def list(self, request, *args, **kwargs):
         serializer = self.get_serializer(self.get_queryset(), many=True)
-        return Response({"success":"Successfully retrived all Courses",
+        return Response({"success":"Successfully retrived all Course pages",
                         "data":serializer.data}, status=status.HTTP_200_OK)
     
     def retrieve(self, request, *args, **kwargs):
         instance = get_object_or_404(CoursePage, id=kwargs.get("pk"))
         serializer = self.get_serializer(instance)
-        return Response({"success": "Successffuly retrieved a course",
+        return Response({"success": "Successffuly retrieved a course page",
                         "data": serializer.data}, status=status.HTTP_200_OK)
     
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        return Response({"success": "Successfully added a new course",
+        return Response({"success": "Successfully added a new course page",
                         "data": serializer.data}, status=status.HTTP_201_CREATED)
     
     def update(self, request, *args, **kwargs):
@@ -205,10 +205,10 @@ class CoursePageViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(instance, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        return Response({"success": "Successfully updated a course",
+        return Response({"success": "Successfully updated a course page",
                         "data": serializer.data}, status=status.HTTP_202_ACCEPTED)
     
     def destroy(self, request, *args, **kwargs):
         instance = get_object_or_404(CoursePage, id=kwargs.get('pk'))
         instance.delete()
-        return Response({"success": "Successfully deleted a course"},status=status.HTTP_204_NO_CONTENT)
+        return Response({"success": "Successfully deleted a course page"},status=status.HTTP_204_NO_CONTENT)
