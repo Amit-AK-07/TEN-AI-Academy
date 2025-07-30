@@ -6,4 +6,5 @@ urlpatterns = [
     path("auth/", include("allauth.urls")),
     path("auth/", include("dj_rest_auth.urls")),
     path("users/", include("users.urls")),
+    path("api/v1/", include("courses.urls"))
 ]

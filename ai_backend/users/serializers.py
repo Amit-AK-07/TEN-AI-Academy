@@ -92,3 +92,4 @@ class FinishRegistrationSerializer(serializers.Serializer):
         user.is_active = True
         user.save(update_fields=["full_name", "job_title", "password", "is_active"])
         return user
+    
