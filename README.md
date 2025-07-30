@@ -1,4 +1,5 @@
 AI Academy API
+
 This project provides a RESTful API for managing course-related resources such as Topics, Instructors, Partnerships, Courses, and Course Pages. It is built using Django and Django REST Framework.
 
 Features
