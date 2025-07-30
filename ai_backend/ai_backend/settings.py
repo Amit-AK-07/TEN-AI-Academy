@@ -18,12 +18,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # local
-    "users",
-    "courses",
     # 3rd-party auth stack
+    "corsheaders",
     "rest_framework",
-    # "rest_framework.authtoken",          # needed by dj-rest-auth internally
     "dj_rest_auth",
     "django.contrib.sites",
     "allauth",
@@ -32,6 +29,9 @@ INSTALLED_APPS = [
     "rest_framework_simplejwt.token_blacklist",  # logout ⇒ black-list
     "allauth.socialaccount",
     "allauth.socialaccount.providers.google",   # <-- provider
+    # local
+    "users",
+    "courses",
     
 ]
 
@@ -39,9 +39,9 @@ SITE_ID = 4
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'corsheaders.middleware.CorsMiddleware', 
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -105,7 +105,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Kolkata'
 
 USE_I18N = True
 
@@ -152,7 +152,7 @@ REST_AUTH = {
     "LOGIN_SERIALIZER": "users.serializers.CustomLoginSerializer",
     "LOGOUT_ON_PASSWORD_CHANGE": False,
     "SESSION_LOGIN": False,
-    "TOKEN_MODEL": None,          # <-- add this line
+    "TOKEN_MODEL": None,
 }
 
 #allauth settings

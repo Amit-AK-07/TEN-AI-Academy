@@ -40,7 +40,7 @@ class PreregisterSerializer(serializers.Serializer):
         email_address, created_email = EmailAddress.objects.get_or_create(
             user=user,
             email=email,
-            defaults={'verified': True, 'primary': True} # Mark as verified and primary
+            defaults={'verified': False, 'primary': True}
         )
         if not created_email:
             email_address.verified = True # Ensure it's verified if it already existed
