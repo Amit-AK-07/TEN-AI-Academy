@@ -10,6 +10,7 @@ import Join from "./pages/Join";
 import ActivateAccount from "./components/auth/ActivateAccount";
 import MyLearning from "./pages/MyLearning";
 import CourseDetailPage from "./components/courseDetails/CourseDetailPageMain";
+import About from "./pages/About";
 
 const App = () => {
   return (
@@ -21,6 +22,7 @@ const App = () => {
         <Route path="/courses" element={<Courses />} />
         <Route path="/signin" element={<SignInForm />} />
         <Route path="/signup" element={<SignUpForm />} />
+        <Route path="/about" element={<About />} />
         <Route path="/join" element={<Join />} />
         <Route path="/my-learnings" element={<MyLearning />} />
         <Route path="/activate/:uid/:token" element={<ActivateAccount />} />
