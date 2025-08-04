@@ -17,10 +17,6 @@ export const courseData = [
       "Build strong foundations in data engineering by working on real-life projects, from ETL pipelines to designing scalable data warehouses.",
     image: course_img,
     duration: "4 months",
-    partner: "IBM",
-    logo: openai,
-    aboutCourse:
-      "This specialization will guide you through the foundations of deep learning, helping you build neural networks and understand the key aspects of AI development.",
 
     whatYouWillLearn: [
       "Basic data analytic methods using spreadsheets",
@@ -28,11 +24,7 @@ export const courseData = [
       "Data visualization using IBM Cognos Analytics",
       "Applying Python for data analysis",
     ],
-    outcomes: [
-      "Gain foundational understanding of data analysis",
-      "Work with real-world datasets",
-      "Prepare for entry-level data analyst roles",
-    ],
+
     skills: [
       "Data Analysis",
       "Excel",
@@ -54,20 +46,7 @@ export const courseData = [
       "IBM Cognos Analytics",
     ],
     videoUrl: intro1,
-    courseOutline: [
-      {
-        title: "Introduction to Data Analytics",
-        description:
-          "Learn about the world of data analytics and gain insights into the data ecosystem.",
-        duration: "6 hours",
-      },
-      {
-        title: "Excel Basics for Data Analysis",
-        description:
-          "Use Excel to perform data wrangling and analysis with functions and pivot tables.",
-        duration: "8 hours",
-      },
-    ],
+
     faqs: [
       {
         question: "What background knowledge is required?",
@@ -101,6 +80,120 @@ export const courseData = [
     ],
     topics: ["Data Engineering", "Data Processing", "MLOps"],
     level: "Beginner",
+    whyEnroll: {
+      title: "Why Enroll?",
+      paragraphs: [
+        "Data-informed decision-making is now an essential skill for everyone, from everyday consumer choices to business decisions at all levels. As reliance on data grows, so does the need for professionals who can analyze and interpret it effectively.",
+        "The Data Analytics Professional Certificate, led by industry leader Sean Barnes, equips you with the skills to manage the entire data lifecycle, from defining problems to delivering insights. With this certificate, you’ll be prepared to pursue an entry-level role in data analytics or strengthen your current role with a solid foundation in data analysis.",
+        "The skills you’ll gain are in high demand, and with data science roles projected to grow 36% from 2023 to 2033 according to the U.S. Bureau of Labor Statistics, developing these skills puts you at the forefront of a data-centric world.",
+      ],
+      image: {
+        src: course_img,
+        alt: "The data analytics lifecycle",
+      },
+      content: [
+        "You’ll begin by learning the foundations of analysis and visualization, then move on to statistical techniques that support evidence-based decision-making. Next, you’ll develop Python skills to automate workflows and analyze data at scale (no prior coding experience required). Then, you’ll work with real-world data to extract information from websites, APIs, and databases, and clean data with Python and SQL to prepare it for analysis.",
+        "Finally, you’ll learn to present your analysis in ways that support real decisions through clear writing, compelling visualizations, and interactive dashboards. You’ll also prepare for the job search with practical guidance on resumes, portfolios, and interviews.",
+        "Unique to this program is its integration of AI tools into the analytics workflow. You’ll learn to use large language models as a thought partner, accelerating tasks like simulation modeling, formula debugging, and data visualization. Each of the course examples comes from real-world use cases, building practical and immediately useful skills.",
+      ],
+    },
+    syllabus: {
+      courses: [
+        {
+          title: "Course 1: Data Analytics Foundations",
+          modules: [
+            {
+              title: "Module 1: Data and the Data Analyst Role",
+              topics: [
+                "Define data and its common representations, and differentiate between structured vs. unstructured data and variable types (categorical, discrete, continuous).",
+                "List common data file formats (txt, CSV, JSON, etc.) and explore data roles (analyst, engineer, scientist) and their business impact.",
+                "Identify career opportunities and the components of the data ecosystem. Use large language models (LLMs) for stakeholder analysis and evaluate their strengths and weaknesses.",
+              ],
+            },
+            {
+              title: "Module 2: Using Spreadsheets for Data Analytics",
+              topics: [
+                "Describe spreadsheet use cases in business and life, introducing Google Sheets and alternatives.",
+                "Perform basic spreadsheet tasks (create, save, share, organize data) and use tools to sort and filter data.",
+                "Compare different file types and data types (date, numeric, text) and connect them to structured/unstructured data.",
+              ],
+            },
+            {
+              title: "Module 3: Data Visualization",
+              topics: [
+                "Describe spreadsheet use cases in business and life, introducing Google Sheets and alternatives.",
+                "Perform basic spreadsheet tasks (create, save, share, organize data) and use tools to sort and filter data.",
+                "Compare different file types and data types (date, numeric, text) and connect them to structured/unstructured data.",
+              ],
+            },
+            {
+              title: "Module 4: The Data Analytics Lifecycle",
+              topics: [
+                "Describe spreadsheet use cases in business and life, introducing Google Sheets and alternatives.",
+                "Perform basic spreadsheet tasks (create, save, share, organize data) and use tools to sort and filter data.",
+                "Compare different file types and data types (date, numeric, text) and connect them to structured/unstructured data.",
+              ],
+            },
+          ],
+        },
+        {
+          title: "Course 2: Applied Statistics for Data Analytics",
+          modules: [
+            {
+              title: "Module 1: Probability & Distributions",
+              topics: [
+                "Describe spreadsheet use cases in business and life, introducing Google Sheets and alternatives.",
+                "Perform basic spreadsheet tasks (create, save, share, organize data) and use tools to sort and filter data.",
+                "Compare different file types and data types (date, numeric, text) and connect them to structured/unstructured data.",
+              ],
+            },
+            {
+              title: "Module 2: Inferential Statistics",
+              topics: ["Variables, data types, and control flow..."],
+            },
+          ],
+        },
+        {
+          title: "Course 3: Python for Data Analytics",
+          modules: [
+            {
+              title: "Module 1: Python Basics",
+              topics: ["Variables, data types, and control flow..."],
+            },
+            {
+              title: "Module 2: Data Analysis Libraries",
+              topics: ["Using NumPy and pandas for analysis..."],
+            },
+          ],
+        },
+        {
+          title: "Course 4: Data I/O and Preprocessing with Python and SQL",
+          modules: [
+            {
+              title: "Module 1: Data Input/Output",
+              topics: ["Reading and writing CSV, Excel..."],
+            },
+            {
+              title: "Module 2: SQL Basics",
+              topics: ["Creating tables, queries, joins..."],
+            },
+          ],
+        },
+        {
+          title: "Course 5: Data Storytelling",
+          modules: [
+            {
+              title: "Module 1: Storytelling Principles",
+              topics: ["Building effective data narratives..."],
+            },
+            {
+              title: "Module 2: Designing Dashboards",
+              topics: ["Using tools like Tableau or Power BI..."],
+            },
+          ],
+        },
+      ],
+    },
   },
   {
     id: 2,
@@ -128,16 +221,31 @@ In this course, you’ll learn how to build voice agents that listen, reason, an
 By the end of this course, you’ll have learned the components of an AI voice agent pipeline, combined them into a system with low-latency communication, and deployed them on cloud infrastructure so it scales to many users.`,
     whoShouldJoin:
       "Anyone who wants to build conversational voice applications using LLMs. You’ll get the most out of this course if you’re already familiar with basic Python and foundational AI workflows.",
-    Instructor: [{ name: "John Doe" }, { name: "Jane Smith" }],
+    Instructor: [
+      {
+        name: "John Doe",
+        image: course_img,
+        bio: "Senior Python Developer specializing in AI systems, with 10+ years building production-ready ML pipelines.",
+        linkedIn: "https://linkedin.com/in/johndoe",
+        twitter: "https://twitter.com/johndoe",
+      },
+    ],
     courseOutline: [
       {
         title: "Introduction",
         type: "Video",
-        hasCode: false,
-        // videoUrl: "https://youtu.be/p83CiZlwsFg?si=sWeiHSpttNr-MBho",
+        hasCode: true,
         videoFile: intro1,
+        // videoUrl: "https://youtu.be/p83CiZlwsFg?si=sWeiHSpttNr-MBho",
+
+        duration: "3min",
       },
-      { title: "Why MCP", type: "Video", hasCode: false },
+      {
+        title: "Why MCP",
+        type: "Video",
+        videoUrl: "https://youtu.be/p83CiZlwsFg?si=sWeiHSpttNr-MBho",
+        hasCode: false,
+      },
       {
         title: "MCP Architecture",
         type: "Video",
@@ -190,13 +298,6 @@ By the end of this course, you’ll have learned the components of an AI voice a
         title: "Conclusion",
         type: "Video",
         hasCode: false,
-        videoUrl: "https://youtu.be/p83CiZlwsFg?si=sWeiHSpttNr-MBho",
-      },
-      { title: "Quiz", type: "Quiz", hasCode: false },
-      {
-        title: "Appendix – Tips & Help",
-        type: "Reading",
-        hasCode: true,
         videoUrl: "https://youtu.be/p83CiZlwsFg?si=sWeiHSpttNr-MBho",
       },
     ],
@@ -1737,3 +1838,65 @@ export const coursesYouMightLike = [
     ],
   },
 ];
+
+// Why enroll
+
+// export const enrollContent = [
+//   {
+//     id: 1,
+//     title: "Why Enroll in Data Analytics?",
+//     introParagraphs: [
+//       "Data-informed decision-making is now essential for everyone, from consumer choices to business strategy.",
+//       "The Data Analytics Professional Certificate, led by Sean Barnes, equips you with end-to-end data lifecycle skills.",
+//       "With data roles projected to grow 36% from 2023 to 2033, now’s the time to get ahead.",
+//     ],
+//     image: {
+//       src: course_img,
+//       alt: "Data Analytics Lifecycle",
+//     },
+//     details: [
+//       "Learn analysis, visualization, and evidence-based statistics.",
+//       "Develop Python skills and extract data from websites, APIs, and databases.",
+//       "Use AI tools for modeling, debugging, and automating insights.",
+//     ],
+//     cta: "Enroll in Data Analytics",
+//   },
+//   {
+//     id: 2,
+//     title: "Why Enroll in AI & Machine Learning?",
+//     introParagraphs: [
+//       "AI is reshaping every industry, from healthcare to finance.",
+//       "This program covers core ML concepts, model building, and responsible AI practices.",
+//       "AI and ML jobs are expected to increase by over 40% in the next decade.",
+//     ],
+//     image: {
+//       src: course_img,
+//       alt: "Machine Learning Visualization",
+//     },
+//     details: [
+//       "Start with ML foundations like supervised and unsupervised learning.",
+//       "Build models using Python libraries like scikit-learn and TensorFlow.",
+//       "Explore ethical considerations and explainability in AI.",
+//     ],
+//     cta: "Enroll in AI & ML",
+//   },
+//   {
+//     id: 3,
+//     title: "Why Enroll in Business Intelligence?",
+//     introParagraphs: [
+//       "Transform raw data into actionable insights with BI.",
+//       "Gain skills in tools like Power BI, Tableau, and SQL-based dashboards.",
+//       "BI professionals are critical to modern data-driven companies.",
+//     ],
+//     image: {
+//       src: course_img,
+//       alt: "Business Intelligence Tools",
+//     },
+//     details: [
+//       "Understand KPIs, data modeling, and storytelling with visuals.",
+//       "Work on real-world datasets and build executive-level dashboards.",
+//       "Bridge the gap between business and data teams.",
+//     ],
+//     cta: "Enroll in BI Program",
+//   },
+// ];

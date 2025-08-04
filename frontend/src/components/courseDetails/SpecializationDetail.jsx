@@ -7,6 +7,8 @@ import WhyEnroll from "./WhyEnroll";
 import { Clock, CheckCircle } from "lucide-react";
 import { FaPlay } from "react-icons/fa";
 import Footer from "../common/Footer";
+import CourseSyllabus from "./CourseSyllabus";
+import LearnerReviews from "./LearnerReviews";
 
 const getYouTubeEmbedUrl = (url) => {
   const match = url.match(
@@ -31,10 +33,7 @@ const Hero = ({ course }) => (
           </p>
           <div className="flex flex-col sm:flex-row gap-4 mb-6">
             <button className="px-8 py-4 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-all duration-300 shadow-lg hover:shadow-xl">
-              Enroll for Free
-            </button>
-            <button className="px-8 py-4 border-2 border-blue-600 text-blue-600 font-semibold rounded-lg hover:bg-blue-50 transition-all duration-300">
-              Try for Free
+              Enroll Now
             </button>
           </div>
         </div>
@@ -207,20 +206,24 @@ const SpecializationDetail = ({ course }) => {
     <div className="min-h-screen bg-gray-50">
       <Hero course={course} />
       <VideoSection videoUrl={course.videoUrl} course={course} />
-      <WhyEnroll />
+      <WhyEnroll course={course} />
       <Instructor course={course} />
-      <CourseOutline courseOutline={course.courseOutline} />
+
+      <div className="mt-5 ">
+        <h2 className="text-4xl font-bold mb-4 text-center">Course Syllabus</h2>
+        <CourseSyllabus />
+      </div>
+
       <Skills skills={course.skills} />
       <WhatYouWillLearn
         items={course.whatYouWillLearn}
         type="specialization"
         heading="What You'll Learn in this Course"
       />
-      <Outcomes outcomes={course.outcomes} />
-      <About aboutCourse={course.aboutCourse} />
+      <LearnerReviews />
       <FAQ faqs={course.faqs} />
 
-      <div className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white py-16 px-6">
+      <div className="bg-gradient-to-r from-blue-300 to-indigo-300 text-white py-16 px-6">
         <div className="max-w-5xl mx-auto text-center">
           <h2 className="text-4xl font-bold mb-6">
             Ready to Transform Your Career?
@@ -231,10 +234,7 @@ const SpecializationDetail = ({ course }) => {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button className="px-8 py-4 bg-white text-blue-600 font-semibold rounded-lg hover:bg-gray-100 transition-all duration-300 shadow-lg hover:shadow-xl">
-              Enroll Now - Free to Try
-            </button>
-            <button className="px-8 py-4 border-2 border-white text-white font-semibold rounded-lg hover:bg-white hover:text-blue-600 transition-all duration-300">
-              Learn More
+              Enroll Now
             </button>
           </div>
         </div>

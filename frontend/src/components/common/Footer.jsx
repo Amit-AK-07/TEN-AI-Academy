@@ -10,7 +10,7 @@ import { Link } from "react-router-dom";
 
 export default function Footer() {
   return (
-    <footer className="bg-[#3f5660] text-white py-8">
+    <footer className="bg-[#3f5660] text-white py-10">
       <div className="max-w-6xl mx-auto px-4 flex flex-col items-center space-y-6">
         {/* Logo */}
         <div className="text-xl font-semibold flex items-center gap-2">

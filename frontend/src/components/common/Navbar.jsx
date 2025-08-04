@@ -91,7 +91,7 @@ const Navbar = () => {
 
   return (
     <nav className="w-full shadow-sm bg-white sticky top-0 z-50">
-      <div className="flex items-center justify-between max-w-[1300px] mx-auto px-6 py-4">
+      <div className="flex items-center justify-between max-w-[1400px] mx-auto px-6 py-4">
         {/* Logo */}
         <Link to="/" onClick={() => setIsOpen(false)}>
           <div className="flex items-center space-x-2">

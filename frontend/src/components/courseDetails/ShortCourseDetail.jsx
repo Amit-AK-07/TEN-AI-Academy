@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { FaPlay } from "react-icons/fa";
 import CourseOutline from "../courseDetails/CourseOutline";
 import WhatYouWillLearn from "../courseDetails/WhatYouWillLearn";
+import Footer from "../common/Footer";
+import Instructor from "./Instructor";
 
 function getYouTubeEmbedUrl(url) {
   const match = url?.match(
@@ -176,15 +178,7 @@ const ShortCourseDetail = ({ course }) => {
               </div>
             )}
           </div>
-          {courseOutlineData.length ? (
-            <CourseOutline courseOutline={courseOutlineData} />
-          ) : (
-            <div className="bg-white p-6 rounded-xl shadow">
-              <p className="text-gray-700">
-                No course outline available at the moment.
-              </p>
-            </div>
-          )}
+          <Instructor course={course} />
         </div>
 
         {/* Sidebar */}
@@ -193,17 +187,36 @@ const ShortCourseDetail = ({ course }) => {
             <h3 className="text-lg font-semibold mb-4">
               {course.title || "Untitled"}
             </h3>
+
             <ul className="text-gray-700 mb-4 space-y-3 text-sm">
               <li>⚡ {course.level || "Not specified"}</li>
               <li>⏰ 1 h</li>
               <li>🎥 {courseOutlineData.length} Lessons</li>
+              <li>👨‍🏫 {course.Instructor?.[0]?.name}</li>
+
+              {/* 👇 Collaborator logo and name */}
+              {course.collaborators?.length > 0 && (
+                <li className="flex items-center space-x-2">
+                  <img
+                    src={course.collaborators[0].logo}
+                    alt={course.collaborators[0].name}
+                    className="w-6 h-6 object-contain"
+                  />
+                  <span>{course.collaborators[0].name}</span>
+                </li>
+              )}
             </ul>
-            <button className="w-full bg-red-500 hover:bg-red-600 text-white font-bold py-3 rounded-lg">
+
+            <Link
+              to={`/courses/${course.id}/content`}
+              className="block w-full bg-red-500 hover:bg-red-600 text-white font-bold py-3 rounded-lg text-center"
+            >
               Enroll for Free
-            </button>
+            </Link>
           </div>
         </aside>
       </div>
+      <Footer />
     </div>
   );
 };
