@@ -1,9 +1,16 @@
 import React from "react";
 import { FaLinkedin, FaTwitter } from "react-icons/fa";
+import { GoClock } from "react-icons/go";
+import { IoBookOutline } from "react-icons/io5";
+import { PiCellSignalFullThin } from "react-icons/pi";
+import { RiDoubleQuotesL } from "react-icons/ri";
 
 const Instructor = ({ course }) => {
-  // SPECIALIZATION INSTRUCTOR
-  if (course.type === "Specialization" && course.instructor) {
+  // SHARED UI FOR SPECIALIZATION & COURSE
+  if (
+    (course.type === "Specialization" || course.type === "Course") &&
+    course.instructor
+  ) {
     return (
       <div className="bg-gradient-to-br from-gray-100 to-gray-300 py-16 px-6">
         <div className="max-w-3xl mx-auto text-center">
@@ -51,6 +58,20 @@ const Instructor = ({ course }) => {
           <p className="text-gray-700 leading-relaxed text-lg">
             {course.instructorBio || "Bio Not Available"}
           </p>
+        </div>
+        <div className="mt-20 flex flex-col md:flex-row justify-center items-center space-y-4 md:space-y-0 gap-24 bg-[#76aab9] bg-opacity-70 rounded-xl px-6 py-8 max-w-4xl mx-auto">
+          <div className="flex items-center space-x-2 text-white">
+            <IoBookOutline className="text-xl" />
+            <span>5 Modules</span>
+          </div>
+          <div className="flex items-center space-x-2 text-white">
+            <GoClock className="text-xl" />
+            <span>Self-paced</span>
+          </div>
+          <div className="flex items-center space-x-2 text-white">
+            <PiCellSignalFullThin className="text-xl" />
+            <span>Intermediate</span>
+          </div>
         </div>
       </div>
     );

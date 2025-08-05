@@ -5,6 +5,7 @@ import CourseOutline from "../courseDetails/CourseOutline";
 import WhatYouWillLearn from "../courseDetails/WhatYouWillLearn";
 import Footer from "../common/Footer";
 import Instructor from "./Instructor";
+import { FaArrowRightLong, FaSquareXTwitter } from "react-icons/fa6";
 
 function getYouTubeEmbedUrl(url) {
   const match = url?.match(
@@ -92,9 +93,12 @@ const ShortCourseDetail = ({ course }) => {
               </span>
             </p>
 
-            <button className="bg-white text-blue-700 font-semibold px-5 py-2 rounded hover:bg-gray-100">
-              Enroll for Free
-            </button>
+            <Link to={`/courses/${course.id}/content`}>
+              <button className="bg-white text-blue-600 font-semibold px-6 py-3 rounded-lg hover:bg-white-600 transition flex items-center gap-2">
+                Enroll Now
+                <FaArrowRightLong />
+              </button>
+            </Link>
           </div>
 
           {/* ✅ Video Preview */}

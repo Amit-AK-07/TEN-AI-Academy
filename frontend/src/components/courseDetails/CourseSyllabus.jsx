@@ -1,18 +1,20 @@
 import React, { useState } from "react";
-import { Link } from "lucide-react";
-import { courseData } from "../../components/lib/constsnt";
 
-export default function CourseSyllabus() {
+export default function CourseSyllabus({ syllabus }) {
   const [activeIndex, setActiveIndex] = useState(0);
-  const syllabusData = courseData[0].syllabus;
-  const activeCourse = syllabusData.courses[activeIndex];
+
+  if (!syllabus || !syllabus.courses || syllabus.courses.length === 0) {
+    return <p className="text-center text-gray-500">No syllabus available.</p>;
+  }
+
+  const activeCourse = syllabus.courses[activeIndex];
 
   return (
     <div className="flex justify-center p-8">
       <div className="flex max-w-[1000px] w-full rounded-xl overflow-hidden shadow-md border border-gray-200 items-stretch">
         {/* Left: Course List */}
         <div className="w-2/5 border-r border-gray-300 bg-gray-100">
-          {syllabusData.courses.map((course, index) => (
+          {syllabus.courses.map((course, index) => (
             <div
               key={index}
               onClick={() => setActiveIndex(index)}
