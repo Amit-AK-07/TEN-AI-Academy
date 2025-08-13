@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     # local
     "users",
     "courses",
+    "join_forms",
     
 ]
 
